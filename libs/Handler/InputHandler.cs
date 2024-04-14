@@ -23,6 +23,10 @@ public sealed class InputHandler{
     public void Handle(ConsoleKeyInfo keyInfo)
     {
         GameObject focusedObject = engine.GetFocusedObject();
+        GameObject box = engine.GetBoxObject();
+        GameObject goal = engine.GetGoalObject();
+        GameObject player = engine.GetPlayerObject();
+        GameObject wall = engine.GetWallObject();
 
         if (focusedObject != null) {
             // Handle keyboard input to move the player
@@ -30,15 +34,27 @@ public sealed class InputHandler{
             {
                 case ConsoleKey.UpArrow:
                     focusedObject.Move(0, -1);
+                    focusedObject.CheckBoxCollision(box, player,Direction.Up);
+                    engine.CheckWallCollision(wall, player, box, Direction.Up);
+                  
                     break;
                 case ConsoleKey.DownArrow:
                     focusedObject.Move(0, 1);
+                    focusedObject.CheckBoxCollision(box, player, Direction.Down);
+                    engine.CheckWallCollision(wall, player, box, Direction.Down);
+                   
                     break;
                 case ConsoleKey.LeftArrow:
                     focusedObject.Move(-1, 0);
+                    focusedObject.CheckBoxCollision(box, player,Direction.Left);
+                    engine.CheckWallCollision(wall, player, box, Direction.Left);
+                   
                     break;
                 case ConsoleKey.RightArrow:
                     focusedObject.Move(1, 0);
+                    focusedObject.CheckBoxCollision(box, player, Direction.Right);
+                    engine.CheckWallCollision(wall, player, box, Direction.Right);
+                  
                     break;
                 default:
                     break;
