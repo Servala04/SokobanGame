@@ -264,28 +264,25 @@ public bool CanMove(GameObject player,GameObject box, int dx, int dy)
 
     return true;
 }
-   public int getMoveCount()
-        {
-            return steps.Count;
-        }
+ 
         
         public void UndoMove(GameObject player, GameObject box){
  
         
-            if (steps.Count > 0)
-            {
-                steps.RemoveAt(steps.Count - 1);
-                for (int i = 0; i < GameLevel.Length; i++)
-                {
-                    PlayingLevel[i] = GameLevel[i];
-                }
-                getPlayerPosition();
-                foreach (Direction s in steps)
-                {
-                    this.Move(s);
-                }
+            // if (steps.Count > 0)
+            // {
+            //     steps.RemoveAt(steps.Count - 1);
+            //     for (int i = 0; i < GameLevel.Length; i++)
+            //     {
+            //         PlayingLevel[i] = GameLevel[i];
+            //     }
+            //     getPlayerPosition();
+            //     foreach (Direction s in steps)
+            //     {
+            //         this.Move(s);
+            //     }
                 
-            }
+            
         
 }
 

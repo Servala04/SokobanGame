@@ -8,6 +8,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = game
-build_property.ProjectDir = C:\Users\kendl\OneDrive\Documents\Visual Studio 2022\MyCodes\cd_code\sokoban\SokobanGame\game\
+build_property.ProjectDir = C:\Users\kendl\OneDrive\Documents\Visual Studio 2022\MyCodes\cd_code\SokobanGame\game\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 

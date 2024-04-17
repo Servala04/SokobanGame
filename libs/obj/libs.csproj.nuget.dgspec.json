@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\kendl\\OneDrive\\Documents\\Visual Studio 2022\\MyCodes\\cd_code\\sokoban\\SokobanGame\\libs\\libs.csproj": {}
+    "C:\\Users\\kendl\\OneDrive\\Documents\\Visual Studio 2022\\MyCodes\\cd_code\\SokobanGame\\libs\\libs.csproj": {}
   },
   "projects": {
-    "C:\\Users\\kendl\\OneDrive\\Documents\\Visual Studio 2022\\MyCodes\\cd_code\\sokoban\\SokobanGame\\libs\\libs.csproj": {
+    "C:\\Users\\kendl\\OneDrive\\Documents\\Visual Studio 2022\\MyCodes\\cd_code\\SokobanGame\\libs\\libs.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\kendl\\OneDrive\\Documents\\Visual Studio 2022\\MyCodes\\cd_code\\sokoban\\SokobanGame\\libs\\libs.csproj",
+        "projectUniqueName": "C:\\Users\\kendl\\OneDrive\\Documents\\Visual Studio 2022\\MyCodes\\cd_code\\SokobanGame\\libs\\libs.csproj",
         "projectName": "libs",
-        "projectPath": "C:\\Users\\kendl\\OneDrive\\Documents\\Visual Studio 2022\\MyCodes\\cd_code\\sokoban\\SokobanGame\\libs\\libs.csproj",
+        "projectPath": "C:\\Users\\kendl\\OneDrive\\Documents\\Visual Studio 2022\\MyCodes\\cd_code\\SokobanGame\\libs\\libs.csproj",
         "packagesPath": "C:\\Users\\kendl\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\kendl\\OneDrive\\Documents\\Visual Studio 2022\\MyCodes\\cd_code\\sokoban\\SokobanGame\\libs\\obj\\",
+        "outputPath": "C:\\Users\\kendl\\OneDrive\\Documents\\Visual Studio 2022\\MyCodes\\cd_code\\SokobanGame\\libs\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\kendl\\AppData\\Roaming\\NuGet\\NuGet.Config"
