@@ -72,4 +72,38 @@ public class Map {
             RepresentationalLayer[gameObject.PosY, gameObject.PosX] = gameObject.CharRepresentation;
         }
     }
+
+    public GameObject?[,] GetGameObjectLayer() {
+        return GameObjectLayer.Clone() as GameObject?[,];
+    }
+
+    // Method to set a specific position, used by RestoreState
+    public void SetGameObjectAt(int x, int y, GameObject gameObject) {
+        if (x >= 0 && x < _mapWidth && y >= 0 && y < _mapHeight) {
+            GameObjectLayer[x, y] = gameObject;
+        }
+    }
+
+    public void RestoreState(MapState state) {
+        var stateGameObjects = state.GetGameObjects();
+        for (int i = 0; i < MapHeight; i++) {
+            for (int j = 0; j < MapWidth; j++) {
+                SetGameObjectAt(i, j, stateGameObjects[i, j]);
+            }
+        }
+    }
+
+
+}
+
+public class MapState {
+    private GameObject[,] GameObjects;
+
+    public MapState(Map map) {
+        GameObjects = map.GetGameObjectLayer();
+    }
+
+    public GameObject[,] GetGameObjects() {
+        return GameObjects;
+    }
 }

@@ -96,70 +96,70 @@ public sealed class GameEngine
         return null;
     }
 
-public void CheckWallCollision(GameObject wall, GameObject player, GameObject box, Direction playerDirection)
-{
-    GameObject playerObject = GetPlayerObject(); // Rename the local variable to 'playerObject'
-    GameObject boxObject = GetBoxObject(); // Rename the local variable to 'boxObject'
-
-    foreach (GameObject obj in gameObjects)
+    public void CheckWallCollision(GameObject wall, GameObject player, GameObject box, Direction playerDirection)
     {
-        if (obj.Type == GameObjectType.Obstacle)
+        GameObject playerObject = GetPlayerObject(); // Rename the local variable to 'playerObject'
+        GameObject boxObject = GetBoxObject(); // Rename the local variable to 'boxObject'
+
+        foreach (GameObject obj in gameObjects)
         {
-            wall = obj;
-
-            switch (playerDirection)
+            if (obj.Type == GameObjectType.Obstacle)
             {
-                case Direction.Up:
-                    if (playerObject.PosY == wall.PosY && playerObject.PosX == wall.PosX)
-                    {
-                        playerObject.PosY++;
-                    }
-                    else if (boxObject.PosY == wall.PosY && boxObject.PosX == wall.PosX)
-                    {
-                        boxObject.PosY++;
-                        playerObject.PosY++;
-                    }
-                    break;
-                case Direction.Down:
-                    if (playerObject.PosY == wall.PosY && playerObject.PosX == wall.PosX)
-                    {
-                        playerObject.PosY--;
-                    }
-                    else if (boxObject.PosY == wall.PosY && boxObject.PosX == wall.PosX)
-                    {
-                        boxObject.PosY--;
-                        playerObject.PosY--;
-                    }
+                wall = obj;
 
-                    break;
-                case Direction.Left:
-                    if (playerObject.PosX == wall.PosX && playerObject.PosY == wall.PosY)
-                    {
-                        playerObject.PosX++;
-                    }
-                    else if (boxObject.PosX == wall.PosX && boxObject.PosY == wall.PosY)
-                    {
-                        boxObject.PosX++;
-                        playerObject.PosX++;
-                    }
-                    break;
-                case Direction.Right:
-                    if (playerObject.PosX == wall.PosX && playerObject.PosY == wall.PosY)
-                    {
-                        playerObject.PosX--;
-                    }
-                    else if (boxObject.PosX == wall.PosX && boxObject.PosY == wall.PosY)
-                    {
-                        boxObject.PosX--;
-                        playerObject.PosX--;
-                    }
-                    break;
-                default:
-                    break;
+                switch (playerDirection)
+                {
+                    case Direction.Up:
+                        if (playerObject.PosY == wall.PosY && playerObject.PosX == wall.PosX)
+                        {
+                            playerObject.PosY++;
+                        }
+                        else if (boxObject.PosY == wall.PosY && boxObject.PosX == wall.PosX)
+                        {
+                            boxObject.PosY++;
+                            playerObject.PosY++;
+                        }
+                        break;
+                    case Direction.Down:
+                        if (playerObject.PosY == wall.PosY && playerObject.PosX == wall.PosX)
+                        {
+                            playerObject.PosY--;
+                        }
+                        else if (boxObject.PosY == wall.PosY && boxObject.PosX == wall.PosX)
+                        {
+                            boxObject.PosY--;
+                            playerObject.PosY--;
+                        }
+
+                        break;
+                    case Direction.Left:
+                        if (playerObject.PosX == wall.PosX && playerObject.PosY == wall.PosY)
+                        {
+                            playerObject.PosX++;
+                        }
+                        else if (boxObject.PosX == wall.PosX && boxObject.PosY == wall.PosY)
+                        {
+                            boxObject.PosX++;
+                            playerObject.PosX++;
+                        }
+                        break;
+                    case Direction.Right:
+                        if (playerObject.PosX == wall.PosX && playerObject.PosY == wall.PosY)
+                        {
+                            playerObject.PosX--;
+                        }
+                        else if (boxObject.PosX == wall.PosX && boxObject.PosY == wall.PosY)
+                        {
+                            boxObject.PosX--;
+                            playerObject.PosX--;
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }
-}
     public void Setup()
     {
 
@@ -208,12 +208,12 @@ public void CheckWallCollision(GameObject wall, GameObject player, GameObject bo
         GameObject box = GetBoxObject();
         GameObject goal = GetGoalObject();
         GameObject player = GetPlayerObject();
-      
- Console.WriteLine("Position Box: (" + box.PosX + ", " + box.PosY + ")");
-                Console.WriteLine("Position Player: (" + player.PosX + ", " + player.PosY + ")");
+
+        Console.WriteLine("Position Box: (" + box.PosX + ", " + box.PosY + ")");
+        Console.WriteLine("Position Player: (" + player.PosX + ", " + player.PosY + ")");
         if (!finishLevel(box, goal))
         {
-            
+
             //Render the map
             for (int i = 0; i < map.MapHeight; i++)
             {
@@ -224,12 +224,13 @@ public void CheckWallCollision(GameObject wall, GameObject player, GameObject bo
                 Console.WriteLine();
             }
         }
-      else {
-        Console.WriteLine("Level finished!");
+        else
+        {
+            Console.WriteLine("Level finished!");
+        }
     }
-    }
-    
-    
+
+
 
     // Method to create GameObject using the factory from clients
     public GameObject CreateGameObject(dynamic obj)
@@ -267,4 +268,25 @@ public void CheckWallCollision(GameObject wall, GameObject player, GameObject bo
             Console.Write(' ');
         }
     }
+
+    // Save MapState
+
+    private Stack<MapState> stateHistory = new Stack<MapState>();
+
+    public void SaveState()
+    {
+        stateHistory.Push(new MapState(map));
     }
+
+    public void Rewind()
+    {
+        if (stateHistory.Count > 1) // Ensure there is a previous state to revert to
+        {
+            stateHistory.Pop(); // Remove current state
+            var previousState = stateHistory.Peek();
+            map.RestoreState(previousState);
+            Render();
+        }
+    }
+
+}
