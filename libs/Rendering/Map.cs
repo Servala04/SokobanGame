@@ -49,6 +49,8 @@ public class Map {
         set { _mapHeight = value; Initialize();} // Setter
     }
 
+ 
+
     public GameObject Get(int x, int y){
         return GameObjectLayer[x, y];
     }
@@ -72,4 +74,33 @@ public class Map {
             RepresentationalLayer[gameObject.PosY, gameObject.PosX] = gameObject.CharRepresentation;
         }
     }
+
+
+    // public void GetPlayerPosition(){
+    //     for (int i = 0; i < GameObjectLayer.GetLength(0); i++)
+    //     {
+    //         for (int j = 0; j < GameObjectLayer.GetLength(1); j++)
+    //         {
+    //             if (GameObjectLayer[i, j].Type == GameObjectType.Player)
+    //             {
+    //                 Console.WriteLine("Player position: " + i + ", " + j);
+    //             }
+    //         }
+    //     }
+    // }
+
+    // public void GetMoveCount(){
+    //     int moveCount = 0;
+    //     for (int i = 0; i < GameObjectLayer.GetLength(0); i++)
+    //     {
+    //         for (int j = 0; j < GameObjectLayer.GetLength(1); j++)
+    //         {
+    //             if (GameObjectLayer[i, j].Type == GameObjectType.Player)
+    //             {
+    //                 moveCount++;
+    //             }
+    //         }
+    //     }
+    //     Console.WriteLine("Move count: " + moveCount);
+    // }
 }

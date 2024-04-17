@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "RZmLh62vmKhSYuY7drNCsU2Tv1jmLLBxbsMOqcQMoCnFtRVkXlOYUn4FFsEeDY+3CmYktk+jSayiX5f0qlgrXA==",
+  "dgSpecHash": "AX3hlCVFmUcLxM77N2c1oi67ItHLUl6Mr8VzOSrKkFAm3LWYN4uWTxg14F8t8W388hnLvYu9yx4+mXrm61Agzg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\laura\\CSprojects\\SokobanGame\\game\\game.csproj",
+  "projectFilePath": "C:\\Users\\kendl\\OneDrive\\Documents\\Visual Studio 2022\\MyCodes\\cd_code\\sokoban\\SokobanGame\\game\\game.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\laura\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
+    "C:\\Users\\kendl\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
   ],
   "logs": []
 }
