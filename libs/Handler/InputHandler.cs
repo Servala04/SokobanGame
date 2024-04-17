@@ -40,28 +40,35 @@ public sealed class InputHandler{
                 case ConsoleKey.UpArrow:
                     dy = -1;
                     focusedObject.CheckBoxCollision(boxes, player,Direction.Up, dx, dy);
-                    engine.CanMoveBox(wall, player, boxes, Direction.Up);
                     break;
                 case ConsoleKey.DownArrow:
                     dy = 1;
                     focusedObject.CheckBoxCollision(boxes, player, Direction.Down, dx, dy);
-                    engine.CanMoveBox(wall, player, boxes, Direction.Down);
                     break;
                 case ConsoleKey.LeftArrow:
                     dx = -1;
                     focusedObject.CheckBoxCollision(boxes, player,Direction.Left, dx, dy);
-                    engine.CanMoveBox(wall, player, boxes, Direction.Left);
                     break;
                 case ConsoleKey.RightArrow:
                     dx = 1;
                     focusedObject.CheckBoxCollision(boxes, player, Direction.Right, dx, dy);
-                    engine.CanMoveBox(wall, player, boxes, Direction.Right);
                     break;
                 default:
                     break;
             }
+            Console.WriteLine("Player position after movement: ({0}, {1})", player.PosX, player.PosY);
+
+            foreach (var box in boxes)
+        {
+            Console.WriteLine("Box position after movement: ({0}, {1})", box.PosX, box.PosY);
+        }
+
             if (engine.CanMove(focusedObject, boxes, dx, dy)){
                 focusedObject.Move(dx, dy);
+                Direction playerDirection = GetDirectionFromConsoleKey(keyInfo.Key);
+            
+                 // Move the box if possible
+                engine.CanMoveBox(wall, player, boxes, playerDirection);
                 engine.Render();
             }
             else{
@@ -71,5 +78,22 @@ public sealed class InputHandler{
         }
         
     }
+
+    private Direction GetDirectionFromConsoleKey(ConsoleKey key)
+{
+    switch (key)
+    {
+        case ConsoleKey.UpArrow:
+            return Direction.Up;
+        case ConsoleKey.DownArrow:
+            return Direction.Down;
+        case ConsoleKey.LeftArrow:
+            return Direction.Left;
+        case ConsoleKey.RightArrow:
+            return Direction.Right;
+        default:
+            throw new ArgumentException("Invalid ConsoleKey");
+    }
+}
 
 }
