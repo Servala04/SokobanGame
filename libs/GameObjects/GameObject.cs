@@ -80,32 +80,64 @@ public class GameObject : IGameObject, IMovement
         _posY += dy;
         Console.WriteLine("New Position: (" + _posX + ", " + _posY + ")");
     }
-    public void CheckBoxCollision(GameObject box, GameObject player, Direction playerdirection, int dx, int dy)
-    {
-        int newPosX = player.PosX + dx;
-        int newPosY = player.PosY + dy;
 
-        if (newPosX == box.PosX && newPosY == box.PosY)
+    public void UndoMove() {
+        _posX = _prevPosX;
+        _posY = _prevPosY;
+        
+        Console.WriteLine("Undo Position: (" + _posX + ", " + _posY + ")");
+    }
+    public void CheckBoxCollision(List<GameObject> boxes, GameObject player, Direction playerdirection, int dx, int dy)
+{
+    int newPlayerPosX = player.PosX + dx;
+    int newPlayerPosY = player.PosY + dy;
+
+    foreach (var box in boxes)
+    {
+        int newBoxPosX = box.PosX;
+        int newBoxPosY = box.PosY;
+
+        // Calculate new position of the box based on player's movement direction
+        switch (playerdirection)
         {
-            switch (playerdirection)
-            {
-                case Direction.Up:
-                    box.PosY--;
-                    break;
-                case Direction.Down:
-                    box.PosY++;
-                    break;
-                case Direction.Left:
-                    box.PosX--;
-                    break;
-                case Direction.Right:
-                    box.PosX++;
-                    break;
-            
-            
+            case Direction.Up:
+                newBoxPosY--;
+                break;
+            case Direction.Down:
+                newBoxPosY++;
+                break;
+            case Direction.Left:
+                newBoxPosX--;
+                break;
+            case Direction.Right:
+                newBoxPosX++;
+                break;
             default:
                 break;
         }
+
+        // Check for collision between player and box
+        if (newPlayerPosX == box.PosX && newPlayerPosY == box.PosY)
+        {
+            // Check if new box position is within game bounds and not colliding with other objects
+            bool canMoveBox = true;
+            foreach (var otherBox in boxes)
+            {
+                if (otherBox != box && (newBoxPosX == otherBox.PosX && newBoxPosY == otherBox.PosY))
+                {
+                    canMoveBox = false;
+                    break;
+                }
+            }
+
+            if (canMoveBox)
+            {
+                // Update box position
+                box.PosX = newBoxPosX;
+                box.PosY = newBoxPosY;
+            }
+        }
     }
 }
+
 }

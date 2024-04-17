@@ -25,6 +25,7 @@ public sealed class InputHandler{
         GameObject focusedObject = engine.GetFocusedObject();
       GameObject player = engine.GetPlayer();
         GameObject box = engine.GetBox();
+        List<GameObject> boxes = engine.GetBoxObjects();
         GameObject goal = engine.GetGoal();
         GameObject wall = engine.GetWall();
 
@@ -46,22 +47,22 @@ public sealed class InputHandler{
             {
                 case ConsoleKey.UpArrow:
                     dy = -1;
-                    focusedObject.CheckBoxCollision(box, player, Direction.Up, dx, dy);
+                    focusedObject.CheckBoxCollision(boxes, player, Direction.Up, dx, dy);
                     engine.CanMoveBox(wall, player, box, Direction.Up);
                     break;
                 case ConsoleKey.DownArrow:
                     dy = 1;
-                    focusedObject.CheckBoxCollision(box, player, Direction.Down, dx, dy);
+                    focusedObject.CheckBoxCollision(boxes, player, Direction.Down, dx, dy);
                     engine.CanMoveBox(wall, player, box, Direction.Down);
                     break;
                 case ConsoleKey.LeftArrow:
                     dx = -1;
-                    focusedObject.CheckBoxCollision(box, player, Direction.Left,    dx, dy);
+                    focusedObject.CheckBoxCollision(boxes, player, Direction.Left,    dx, dy);
                     engine.CanMoveBox(wall, player, box, Direction.Left);
                     break;
                 case ConsoleKey.RightArrow:
                     dx = 1;
-                    focusedObject.CheckBoxCollision(box, player, Direction.Right, dx, dy);
+                    focusedObject.CheckBoxCollision(boxes, player, Direction.Right, dx, dy);
                     engine.CanMoveBox(wall, player, box, Direction.Right);
                     break;
                 case ConsoleKey.D:
@@ -75,6 +76,7 @@ public sealed class InputHandler{
             {
              
                 focusedObject.Move(dx, dy);
+                engine.AddMoveCount( );
                 engine.Render();
             }
             else

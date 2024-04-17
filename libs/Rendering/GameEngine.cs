@@ -11,7 +11,7 @@ public sealed class GameEngine
 {
     private static GameEngine? _instance;
     private IGameObjectFactory gameObjectFactory;
-
+private int moveCount;
     public static GameEngine Instance {
         get{
             if(_instance == null)
@@ -25,6 +25,8 @@ public sealed class GameEngine
     private GameEngine() {
         //INIT PROPS HERE IF NEEDED
         gameObjectFactory = new GameObjectFactory();
+                moveCount = 0;
+
     }
 
     private GameObject? _focusedObject;
@@ -50,6 +52,17 @@ public GameObject GetBox(){
         }
     }
      return null;
+}
+public List<GameObject> GetBoxObjects(){
+        List<GameObject> boxObjects = new List<GameObject>();
+
+        foreach (var gameObject in gameObjects){
+            if (gameObject is Box){
+                boxObjects.Add(gameObject);
+            }
+        }
+
+        return boxObjects;
 }
 public GameObject GetPlayer(){
     foreach (var gameObject in gameObjects)
@@ -186,21 +199,24 @@ public void CanMoveBox(GameObject wall, GameObject player, GameObject box, Direc
       
     	    //Console.WriteLine("Position Box: (" + box.PosX + ", " + box.PosY + ")");
               //  Console.WriteLine("Position Player: (" + player.PosX + ", " + player.PosY + ")");
-        if (!finishLevel(box, goal))
+        if (finishLevel(box, goal))
         {
             
             //Render the map
-            for (int i = 0; i < map.MapHeight; i++)
-            {
-                for (int j = 0; j < map.MapWidth; j++)
-                {
-                    DrawObject(map.Get(i, j));
-                }
-                Console.WriteLine();
-            }
+                Console.WriteLine("Level finished!");
+
         }
       else {
-        Console.WriteLine("Level finished!");
+         //Render the map
+        for (int i = 0; i < map.MapHeight; i++)
+        {
+            for (int j = 0; j < map.MapWidth; j++)
+            {
+                DrawObject(map.Get(i, j));
+            }
+            Console.WriteLine();
+        }
+    
     }
     }
     
@@ -238,8 +254,13 @@ public void CanMoveBox(GameObject wall, GameObject player, GameObject box, Direc
         }
     }
   
+ public void AddMoveCount()
+    {
+        moveCount++;
+        Console.WriteLine("Move count: " + moveCount);
+    }
 
-public bool CanMove(GameObject player,GameObject box, int dx, int dy)
+public bool CanMove(GameObject player, GameObject box, int dx, int dy)
 {
     int newPosX = player.PosX + dx;
     int newPosY = player.PosY + dy;
@@ -265,11 +286,57 @@ public bool CanMove(GameObject player,GameObject box, int dx, int dy)
     return true;
 }
  
+  
+
+    // public void Move(Direction direction)
+    // {
+    //     GameObject player = GetPlayer();
+    //     GameObject box = GetBox();
+    //     int dx = 0;
+    //     int dy = 0;
+
+    //     switch (direction)
+    //     {
+    //         case Direction.Up:
+    //             dy = -1;
+    //             break;
+    //         case Direction.Down:
+    //             dy = 1;
+    //             break;
+    //         case Direction.Left:
+    //             dx = -1;
+    //             break;
+    //         case Direction.Right:
+    //             dx = 1;
+    //             break;
+    //         default:
+    //             break;
+    //     }
+
+    //     if (CanMove(player, box, dx, dy))
+    //     {
+    //         player.Move(dx, dy);
+    //         box.Move(dx, dy);
+    //         AddMoveCount();
+    //     }
+    // }
+    
         
         public void UndoMove(GameObject player, GameObject box){
  
         
-            // if (steps.Count > 0)
+            if (moveCount > 0)
+            {
+                moveCount--;
+                Console.WriteLine("Move count: " + moveCount);
+                player.UndoMove();
+                box.UndoMove();
+                Render();
+            }
+            else
+            {
+                Console.WriteLine("No moves to undo");
+            }
             // {
             //     steps.RemoveAt(steps.Count - 1);
             //     for (int i = 0; i < GameLevel.Length; i++)
