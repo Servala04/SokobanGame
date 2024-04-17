@@ -23,26 +23,51 @@ public sealed class InputHandler{
     public void Handle(ConsoleKeyInfo keyInfo)
     {
         GameObject focusedObject = engine.GetFocusedObject();
+        List<GameObject> boxes = engine.GetBoxObjects();
+        GameObject player = engine.GetPlayerObject();
+        GameObject goal = engine.GetGoalObject();
+        GameObject wall = engine.GetWallObject();
+
 
         if (focusedObject != null) {
+
+            int dx = 0;
+            int dy = 0;
+
             // Handle keyboard input to move the player
             switch (keyInfo.Key)
             {
                 case ConsoleKey.UpArrow:
-                    focusedObject.Move(0, -1);
+                    dy = -1;
+                    focusedObject.CheckBoxCollision(boxes, player,Direction.Up, dx, dy);
+                    engine.CanMoveBox(wall, player, boxes, Direction.Up);
                     break;
                 case ConsoleKey.DownArrow:
-                    focusedObject.Move(0, 1);
+                    dy = 1;
+                    focusedObject.CheckBoxCollision(boxes, player, Direction.Down, dx, dy);
+                    engine.CanMoveBox(wall, player, boxes, Direction.Down);
                     break;
                 case ConsoleKey.LeftArrow:
-                    focusedObject.Move(-1, 0);
+                    dx = -1;
+                    focusedObject.CheckBoxCollision(boxes, player,Direction.Left, dx, dy);
+                    engine.CanMoveBox(wall, player, boxes, Direction.Left);
                     break;
                 case ConsoleKey.RightArrow:
-                    focusedObject.Move(1, 0);
+                    dx = 1;
+                    focusedObject.CheckBoxCollision(boxes, player, Direction.Right, dx, dy);
+                    engine.CanMoveBox(wall, player, boxes, Direction.Right);
                     break;
                 default:
                     break;
             }
+            if (engine.CanMove(focusedObject, boxes, dx, dy)){
+                focusedObject.Move(dx, dy);
+                engine.Render();
+            }
+            else{
+                Console.WriteLine("You can't move there!");
+            }
+
         }
         
     }

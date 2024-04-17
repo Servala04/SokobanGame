@@ -1,5 +1,12 @@
 ﻿namespace libs;
 
+public enum Direction{
+        Up,
+        Down,
+        Left,
+        Right
+    }
+
 public class GameObject : IGameObject, IMovement
 {
     public bool Collidable{ get; set; }
@@ -72,5 +79,34 @@ public class GameObject : IGameObject, IMovement
         _posX += dx;
         _posY += dy;
         Console.WriteLine("New Position: (" + _posX + ", " + _posY + ")");
+    }
+
+    public void CheckBoxCollision(List<GameObject> boxes, GameObject player, Direction playerDirection, int dx, int dy){
+        int newPosX = player.PosX + dx;
+        int newPosY = player.PosY + dy;
+
+        foreach (GameObject box in boxes){
+            if (newPosX == box.PosX && newPosY == box.PosY){
+
+                // Check the player's direction and adjust the box and player positions accordingly
+                switch (playerDirection){
+
+                    case Direction.Up:
+                        box.PosY--;
+                        break;
+                    case Direction.Down:
+                        box.PosY++;
+                        break;
+                    case Direction.Left:                
+                        box.PosX--;
+                        break;
+                    case Direction.Right:                    
+                        box.PosX++;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
     }
 }

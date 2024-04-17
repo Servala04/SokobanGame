@@ -41,6 +41,105 @@ public sealed class GameEngine
         return _focusedObject;
     }
 
+    public GameObject GetPlayerObject(){
+        foreach (var gameObject in gameObjects)
+        {
+            if (gameObject is Player)
+            {
+                return gameObject;
+            }
+        }
+        return null;
+    }
+
+    public List<GameObject> GetBoxObjects(){
+        List<GameObject> boxObjects = new List<GameObject>();
+
+        foreach (var gameObject in gameObjects){
+            if (gameObject is Box){
+                boxObjects.Add(gameObject);
+            }
+        }
+
+        return boxObjects;
+}
+
+    public GameObject GetGoalObject(){
+        foreach (var gameObject in gameObjects)
+        {
+            if (gameObject is Goal)
+            {
+                return gameObject;
+            }
+        }
+        return null;
+    }
+    public GameObject GetWallObject(){
+        foreach (var gameObject in gameObjects)
+        {
+            if (gameObject is Obstacle)
+            {
+                return gameObject;
+            }
+        }
+        return null;
+    }
+
+    public void CanMoveBox(GameObject wall, GameObject player, List<GameObject> boxes, Direction playerdirection){
+
+        GameObject playerObj = GetPlayerObject();
+        List<GameObject> boxObjs = GetBoxObjects();
+
+        foreach (GameObject obj in gameObjects){
+            if(obj is Obstacle){
+                wall = obj;
+                foreach (GameObject boxObj in boxObjs) {
+                    switch (playerdirection){
+                        case Direction.Up:
+                            if(playerObj.PosX == wall.PosX && playerObj.PosY == wall.PosY){
+                                playerObj.PosY++;
+                            }
+                            else if(boxObj.PosX == wall.PosX && boxObj.PosY == wall.PosY){
+                                playerObj.PosY++;
+                                boxObj.PosY++;
+                            }
+                            break;
+                        case Direction.Down:
+                            if(playerObj.PosX == wall.PosX && playerObj.PosY == wall.PosY){
+                                playerObj.PosY--;
+                            }
+                            else if(boxObj.PosX == wall.PosX && boxObj.PosY == wall.PosY){
+                                playerObj.PosY--;
+                                boxObj.PosY--;
+                            }
+                            break;
+                        case Direction.Left:
+                            if(playerObj.PosX == wall.PosX && playerObj.PosY == wall.PosY){
+                                playerObj.PosX++;
+                            }
+                            else if(boxObj.PosX == wall.PosX && boxObj.PosY == wall.PosY){
+                                playerObj.PosX++;
+                                boxObj.PosX++;
+                            }
+                            break;
+                        case Direction.Right:
+                            if(playerObj.PosX == wall.PosX && playerObj.PosY == wall.PosY){
+                                playerObj.PosX--;
+                            }
+                            else if(boxObj.PosX == wall.PosX && boxObj.PosY == wall.PosY){
+                                playerObj.PosX--;
+                                boxObj.PosX--;
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }             
+    }
+
+
     public void Setup(){
 
         //Added for proper display of game characters
@@ -111,5 +210,45 @@ public sealed class GameEngine
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.Write(' ');
         }
+    }
+
+    public bool CanMove(GameObject player, List<GameObject> boxes, int dx, int dy){
+
+        int newPosX = player.PosX + dx;
+        int newPosY = player.PosY + dy;
+
+        // Check if player is out of bounds
+        if (newPosX < 0 || newPosX >= map.MapWidth || newPosY < 0 || newPosY >= map.MapHeight) {
+        Console.WriteLine("Out of bounds");
+        return false;
+        }
+
+        // Check if there is an obstacle or wall at the new position
+        GameObject gameObject = map.Get(newPosY, newPosX);
+        if (gameObject is Obstacle) {
+            Console.WriteLine("Obstacle or wall");
+        return false;
+        }
+
+        // Check if there is a box at the new position
+        foreach (GameObject box in boxes) {
+            int newBoxPosX = box.PosX + dx;
+            int newBoxPosY = box.PosY + dy;
+
+            // Check if box is out of bounds
+            if (newBoxPosX < 0 || newBoxPosX >= map.MapWidth || newBoxPosY < 0 || newBoxPosY >= map.MapHeight) {
+                Console.WriteLine("Box out of bounds");
+                return false;
+            }
+
+            // Check if there is an obstacle or another box at the new position
+            gameObject = map.Get(newBoxPosY, newBoxPosX);
+            if (gameObject is Obstacle || gameObject is Box) {
+                Console.WriteLine("Obstacle or another box");
+                return false;
+            }
+        }
+
+        return true;
     }
 }
