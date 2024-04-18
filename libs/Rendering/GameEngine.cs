@@ -31,6 +31,8 @@ public sealed class GameEngine
     private Map map = new Map();
 
     private List<GameObject> gameObjects = new List<GameObject>();
+    private Stack<GameObject?[,]> stateStack = new Stack<GameObject?[,]>();
+
 
 
     public Map GetMap() {
@@ -272,5 +274,19 @@ public sealed class GameEngine
 
 
         return true;
+    }
+
+    public void SaveState()
+    {
+        stateStack.Push(map.GetLayerCopy());
+    }
+
+    public void RestoreState()
+    {
+        if (stateStack.Count > 0)
+        {
+            map.SetLayer(stateStack.Pop());
+            Render();
+        }
     }
 }

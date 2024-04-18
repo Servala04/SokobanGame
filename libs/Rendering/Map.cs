@@ -72,4 +72,18 @@ public class Map {
             RepresentationalLayer[gameObject.PosY, gameObject.PosX] = gameObject.CharRepresentation;
         }
     }
+
+    public GameObject?[,] GetLayerCopy() {
+        var copy = new GameObject?[MapHeight, MapWidth];
+        for (int i = 0; i < MapHeight; i++) {
+            for (int j = 0; j < MapWidth; j++) {
+                copy[i, j] = GameObjectLayer[i, j]?.Clone();
+            }
+        }
+        return copy;
+    }
+
+    public void SetLayer(GameObject?[,] layer) {
+        GameObjectLayer = layer;
+    }
 }

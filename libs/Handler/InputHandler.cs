@@ -35,6 +35,11 @@ public sealed class InputHandler{
             int dx = 0;
             int dy = 0;
 
+            // Save state before processing the move
+            if (keyInfo.Key != ConsoleKey.Z) {  // Ensure it's not an undo action
+                engine.SaveState();
+            }
+
             // Handle keyboard input to move the player
             switch (keyInfo.Key)
             {
