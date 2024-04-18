@@ -284,7 +284,7 @@
     },
     {
       "Type": 2,
-      "Color": 6,
+      "Color": 7,
       "PosX": 2,
       "PosY": 2
     },
@@ -296,9 +296,15 @@
     },
     {
       "Type": 3,
-      "Color": 6,
+      "Color": 7,
       "PosX": 7,
       "PosY": 6
+    },
+    {
+      "Type": 3,
+      "Color": 6,
+      "PosX": 11,
+      "PosY": 8
     },
     {
       "Type": 1,

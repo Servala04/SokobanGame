@@ -14,7 +14,7 @@ public sealed class GameEngine
     private static GameEngine? _instance;
     private IGameObjectFactory gameObjectFactory;
             private Stack<GameState> gameStates;
- private int currentLevelIndex = 0; // Assume the initial level index is 0
+    private int currentLevelIndex = 0; // Assume the initial level index is 0
     private string[] levelFilePaths = { "level00.json", "level01.json", "level02.json" };
 
 
@@ -62,6 +62,20 @@ public GameObject GetBox(){
     }
      return null;
 }
+public GameObject GetBoxObject(int boxNumber){
+    int count = 0;
+    foreach (var gameObject in gameObjects)
+    {
+        if(gameObject is Box){
+            count++;
+            if(count == boxNumber){
+                return gameObject;
+            }
+        }
+    }
+    return null;
+}
+
 public List<GameObject> GetBoxObjects(){
         List<GameObject> boxObjects = new List<GameObject>();
 
@@ -73,6 +87,7 @@ public List<GameObject> GetBoxObjects(){
 
         return boxObjects;
 }
+
 public Player GetPlayerObject(){
     foreach (var gameObject in gameObjects)
     {
@@ -82,15 +97,20 @@ public Player GetPlayerObject(){
     }
      return null;
 }
-public GameObject GetGoalObject(){
+public GameObject GetGoalObject(int goalNumber){
+    int count = 0;
     foreach (var gameObject in gameObjects)
     {
         if(gameObject is Goal){
-            return gameObject;
+            count++;
+            if(count == goalNumber){
+                return gameObject;
+            }
         }
     }
-     return null;
+    return null;
 }
+
 public GameObject GetWallObject(){
     foreach (var gameObject in gameObjects)
     {
@@ -103,9 +123,7 @@ public GameObject GetWallObject(){
 
 public void CanMoveBox(GameObject wall, GameObject player, GameObject box, Direction playerdirection)
 {
-    
-
-   GameObject playerObj = GetPlayerObject();
+GameObject playerObj = GetPlayerObject();
    GameObject boxObj = GetBox();
 
    foreach (GameObject obj in gameObjects){
@@ -204,10 +222,14 @@ public void CanMoveBox(GameObject wall, GameObject player, GameObject box, Direc
         // Set the focused object to the player
         _focusedObject = gameObjects.OfType<Player>().FirstOrDefault();
     }
- public bool finishLevel(GameObject box, GameObject goal)
+
+ public bool finishLevel(GameObject box1, GameObject box2, GameObject goal1, GameObject goal2)
 {
+    bool boxOnGoal1 = (box1.PosX == goal1.PosX && box1.PosY == goal1.PosY);
+    bool boxOnGoal2 = (box2.PosX == goal2.PosX && box2.PosY == goal2.PosY);
+
     // Check if the box is on the goal
-    if (box.PosX == goal.PosX && box.PosY == goal.PosY)
+    if (boxOnGoal1 && boxOnGoal2)
     {
        // Console.WriteLine("Level finished!");
 
@@ -248,13 +270,13 @@ public void CanMoveBox(GameObject wall, GameObject player, GameObject box, Direc
         map.Initialize();
 
         PlaceGameObjects();
-        GameObject box = GetBox();
-        GameObject goal = GetGoalObject();
+        GameObject box1 = GetBoxObject(1);
+        GameObject box2 = GetBoxObject(2);
+        GameObject goal1 = GetGoalObject(1);
+        GameObject goal2 = GetGoalObject(2);
         GameObject player = GetPlayerObject();
       
-    	    //Console.WriteLine("Position Box: (" + box.PosX + ", " + box.PosY + ")");
-              //  Console.WriteLine("Position Player: (" + player.PosX + ", " + player.PosY + ")");
-        if (finishLevel(box, goal))
+        if (finishLevel(box1, box2, goal1, goal2))
         {
             
             //Render the map
