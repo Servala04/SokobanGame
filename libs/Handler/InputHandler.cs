@@ -67,7 +67,7 @@ public sealed class InputHandler{
                     break;
                 case ConsoleKey.D:
                   Console.WriteLine("Undo");
-                  engine.UndoMove( player, box);
+                  engine.UndoMove( (Player)player, boxes);
                     break;
                 default:
                     break;

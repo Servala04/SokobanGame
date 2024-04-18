@@ -1,8 +1,9 @@
 ﻿using System.Reflection.Metadata.Ecma335;
 using System.Text.Json.Nodes;
 
-namespace libs;
 
+namespace libs;
+using libs.Rendering;
 using System.Security.Cryptography;
 using Newtonsoft.Json;
 
@@ -11,6 +12,10 @@ public sealed class GameEngine
 {
     private static GameEngine? _instance;
     private IGameObjectFactory gameObjectFactory;
+            private Stack<GameState> gameStates;
+
+
+
 private int moveCount;
     public static GameEngine Instance {
         get{
@@ -25,6 +30,8 @@ private int moveCount;
     private GameEngine() {
         //INIT PROPS HERE IF NEEDED
         gameObjectFactory = new GameObjectFactory();
+                    gameStates = new Stack<GameState>();
+
                 moveCount = 0;
 
     }
@@ -64,11 +71,11 @@ public List<GameObject> GetBoxObjects(){
 
         return boxObjects;
 }
-public GameObject GetPlayer(){
+public Player GetPlayer(){
     foreach (var gameObject in gameObjects)
     {
         if(gameObject is Player){
-            return gameObject;
+            return (Player)gameObject;
         }
     }
      return null;
@@ -257,7 +264,7 @@ public void CanMoveBox(GameObject wall, GameObject player, GameObject box, Direc
  public void AddMoveCount()
     {
         moveCount++;
-        Console.WriteLine("Move count: " + moveCount);
+        
     }
 
 public bool CanMove(GameObject player, GameObject box, int dx, int dy)
@@ -282,7 +289,8 @@ public bool CanMove(GameObject player, GameObject box, int dx, int dy)
         return false;
     }
 
-
+ GameState currentState = new GameState(GetBoxObjects(), GetPlayer());
+            gameStates.Push(currentState);
     return true;
 }
  
@@ -322,21 +330,35 @@ public bool CanMove(GameObject player, GameObject box, int dx, int dy)
     // }
     
         
-        public void UndoMove(GameObject player, GameObject box){
- 
+     public void UndoMove(Player player, List<GameObject> boxObjects) {
+    if (moveCount > 0) {
+        // Decrement move count
+        moveCount--;
+        Console.WriteLine("Move count: " + moveCount);
         
-            if (moveCount > 0)
-            {
-                moveCount--;
-                Console.WriteLine("Move count: " + moveCount);
-                player.UndoMove();
-                box.UndoMove();
-                Render();
+        // Restore previous game state from the stack
+        if (gameStates.Count > 0) {
+            GameState previousState = gameStates.Pop();
+            
+            // Restore player position
+            player.PosX = previousState.Player.PosX;
+            player.PosY = previousState.Player.PosY;
+            
+            // Restore box positions
+            for (int i = 0; i < boxObjects.Count; i++) {
+                boxObjects[i].PosX = previousState.BoxObjects[i].PosX;
+                boxObjects[i].PosY = previousState.BoxObjects[i].PosY;
             }
-            else
-            {
-                Console.WriteLine("No moves to undo");
-            }
+            
+            // Render the game with the restored state
+            Render();
+        } else {
+            Console.WriteLine("No moves to undo");
+        }
+    }
+}
+
+
             // {
             //     steps.RemoveAt(steps.Count - 1);
             //     for (int i = 0; i < GameLevel.Length; i++)
@@ -353,4 +375,4 @@ public bool CanMove(GameObject player, GameObject box, int dx, int dy)
         
 }
 
-                }
+                
