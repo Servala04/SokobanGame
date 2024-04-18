@@ -80,7 +80,7 @@ public sealed class InputHandler{
             }
             else
             {
-Console.WriteLine("You can't move there!");         }
+            Console.WriteLine("You can't move there!");         }
         }
         
     }
