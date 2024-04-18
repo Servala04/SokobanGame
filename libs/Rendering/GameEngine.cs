@@ -1,5 +1,6 @@
 ﻿using System.Reflection.Metadata.Ecma335;
 using System.Text.Json.Nodes;
+using Newtonsoft.Json;
 
 
 namespace libs;
@@ -13,7 +14,8 @@ public sealed class GameEngine
     private static GameEngine? _instance;
     private IGameObjectFactory gameObjectFactory;
             private Stack<GameState> gameStates;
-
+ private int currentLevelIndex = 0; // Assume the initial level index is 0
+    private string[] levelFilePaths = { "level00.json", "level01.json", "level02.json" };
 
 
 private int moveCount;
@@ -178,19 +180,65 @@ public void CanMoveBox(GameObject wall, GameObject player, GameObject box, Direc
 
     }
 
-   public bool finishLevel(GameObject box, GameObject goal)
+    public void LoadLevel(string levelFilePath)
     {
-        // Check if the box is on the goal
-        if (box.PosX == goal.PosX && box.PosY == goal.PosY)
+        // Read the level data from the file
+        string levelData = File.ReadAllText(levelFilePath);
+
+        // Parse the level data into a dynamic object
+        dynamic level = JsonConvert.DeserializeObject(levelData);
+
+        // Clear the existing game objects
+        gameObjects.Clear();
+
+        // Set up the map dimensions
+        map.MapWidth = level.map.width;
+        map.MapHeight = level.map.height;
+
+        // Create and add game objects from the level data
+        foreach (var gameObjectData in level.gameObjects)
         {
-            Console.WriteLine("Level finished!");
-            return true;
+            AddGameObject(CreateGameObject(gameObjectData));
+        }
+
+        // Set the focused object to the player
+        _focusedObject = gameObjects.OfType<Player>().FirstOrDefault();
+    }
+ public bool finishLevel(GameObject box, GameObject goal)
+{
+    // Check if the box is on the goal
+    if (box.PosX == goal.PosX && box.PosY == goal.PosY)
+    {
+        Console.WriteLine("Level finished!");
+
+        // Increment the current level index
+        currentLevelIndex++;
+
+        // Check if there are more levels to load
+        if (currentLevelIndex < levelFilePaths.Length)
+        {
+            string nextLevelFilePath = Path.Combine("..", "libs", "levels", levelFilePaths[currentLevelIndex]);
+            Console.WriteLine($"Loading next level: {nextLevelFilePath}");
+            // Load the next level
+           LoadLevel(nextLevelFilePath);
+
         }
         else
         {
-            return false;
+            Console.WriteLine("All levels completed!");
         }
+
+        return true;
     }
+    else
+    {
+        return false;
+    }
+}
+
+
+
+ 
 
     public void Render() {
         

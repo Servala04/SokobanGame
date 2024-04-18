@@ -1,7 +1,8 @@
 namespace libs;
 using Newtonsoft.Json;
 
-public class Map {
+public class Map 
+{
     private char[,] RepresentationalLayer;
     private GameObject?[,] GameObjectLayer;
 
