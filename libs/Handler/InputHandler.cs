@@ -91,7 +91,7 @@ public sealed class InputHandler
 
     public void Handle(ConsoleKeyInfo keyInfo)
     {
-        if ((keyInfo.Modifiers & ConsoleModifiers.Control) != 0 && keyInfo.Key == ConsoleKey.Z)
+        if (keyInfo.Key == ConsoleKey.Z)
         {
             engine.Rewind();
         }
@@ -102,6 +102,8 @@ public sealed class InputHandler
             GameObject goal = engine.GetGoalObject();
             GameObject player = engine.GetPlayerObject();
             GameObject wall = engine.GetWallObject();
+
+            engine.SaveState();
 
             if (focusedObject != null)
             {
@@ -114,7 +116,7 @@ public sealed class InputHandler
                         engine.CheckWallCollision(wall, player, box, Direction.Up);
                         break;
                     case ConsoleKey.DownArrow:
-                        focusedObject.Move(0, 1);
+                        
                         focusedObject.CheckBoxCollision(box, player, Direction.Down);
                         engine.CheckWallCollision(wall, player, box, Direction.Down);
                         break;

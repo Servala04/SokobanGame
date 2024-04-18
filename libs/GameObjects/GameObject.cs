@@ -119,5 +119,14 @@ public void CheckBoxCollision(GameObject box, GameObject player, Direction playe
     }
 }
 
+public virtual GameObject Clone() {
+    return new GameObject {
+        PosX = this.PosX,
+        PosY = this.PosY,
+        Color = this.Color,
+        CharRepresentation = this.CharRepresentation
+        // Add other properties that need to be cloned
+    };
+}
     
 }

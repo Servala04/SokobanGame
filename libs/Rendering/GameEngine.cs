@@ -209,7 +209,6 @@ public sealed class GameEngine
         GameObject goal = GetGoalObject();
         GameObject player = GetPlayerObject();
 
-        GameEngine.Instance.LogStateHistory();
         Console.WriteLine(map);
 
         Console.WriteLine("Position Box: (" + box.PosX + ", " + box.PosY + ")");
@@ -286,27 +285,17 @@ public sealed class GameEngine
     {
         if (stateHistory.Count > 1) // Ensure there is a previous state to revert to
         {
+            Console.WriteLine("Current top state before rewind: " + stateHistory.Peek());
             stateHistory.Pop(); // Remove current state
             var previousState = stateHistory.Peek();
+            Console.WriteLine("Restoring to state: " + previousState);
             map.RestoreState(previousState);
             Render();
         }
+        else
+        {
+            Console.WriteLine("Not enough states in history to rewind.");
+        }
     }
-
-// For debugging
-    public void LogStateHistory()
-{
-    if (stateHistory.Count == 0)
-    {
-        Console.WriteLine("No states in history to log."); // Debug statement
-        return;
-    }
-
-    Console.WriteLine("Logging state history:");
-    foreach (var state in stateHistory)
-    {
-        Console.WriteLine(state.ToString());
-    }
-}
 
 }
