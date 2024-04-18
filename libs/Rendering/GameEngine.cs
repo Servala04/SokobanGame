@@ -209,8 +209,12 @@ public sealed class GameEngine
         GameObject goal = GetGoalObject();
         GameObject player = GetPlayerObject();
 
+        GameEngine.Instance.LogStateHistory();
+        Console.WriteLine(map);
+
         Console.WriteLine("Position Box: (" + box.PosX + ", " + box.PosY + ")");
         Console.WriteLine("Position Player: (" + player.PosX + ", " + player.PosY + ")");
+
         if (!finishLevel(box, goal))
         {
 
@@ -288,5 +292,21 @@ public sealed class GameEngine
             Render();
         }
     }
+
+// For debugging
+    public void LogStateHistory()
+{
+    if (stateHistory.Count == 0)
+    {
+        Console.WriteLine("No states in history to log."); // Debug statement
+        return;
+    }
+
+    Console.WriteLine("Logging state history:");
+    foreach (var state in stateHistory)
+    {
+        Console.WriteLine(state.ToString());
+    }
+}
 
 }

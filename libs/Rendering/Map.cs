@@ -106,4 +106,11 @@ public class MapState {
     public GameObject[,] GetGameObjects() {
         return GameObjects;
     }
+
+    public override string ToString()
+    {
+        // Optionally summarize the state, like counting non-null GameObjects
+        int count = GameObjects.Cast<GameObject?>().Count(go => go != null);
+        return $"State with {count} active game objects.";
+    }
 }
