@@ -1,5 +1,6 @@
 namespace libs;
 
+
 public class Player : GameObject {
     private static Player _instance;
 
@@ -15,4 +16,5 @@ public class Player : GameObject {
         }
         return _instance;
     }
+
 }
