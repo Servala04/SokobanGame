@@ -73,7 +73,7 @@ public List<GameObject> GetBoxObjects(){
 
         return boxObjects;
 }
-public Player GetPlayer(){
+public Player GetPlayerObject(){
     foreach (var gameObject in gameObjects)
     {
         if(gameObject is Player){
@@ -82,7 +82,7 @@ public Player GetPlayer(){
     }
      return null;
 }
-public GameObject GetGoal(){
+public GameObject GetGoalObject(){
     foreach (var gameObject in gameObjects)
     {
         if(gameObject is Goal){
@@ -91,7 +91,7 @@ public GameObject GetGoal(){
     }
      return null;
 }
-public GameObject GetWall(){
+public GameObject GetWallObject(){
     foreach (var gameObject in gameObjects)
     {
         if(gameObject is Obstacle){
@@ -105,7 +105,7 @@ public void CanMoveBox(GameObject wall, GameObject player, GameObject box, Direc
 {
     
 
-   GameObject playerObj = GetPlayer();
+   GameObject playerObj = GetPlayerObject();
    GameObject boxObj = GetBox();
 
    foreach (GameObject obj in gameObjects){
@@ -209,7 +209,7 @@ public void CanMoveBox(GameObject wall, GameObject player, GameObject box, Direc
     // Check if the box is on the goal
     if (box.PosX == goal.PosX && box.PosY == goal.PosY)
     {
-        Console.WriteLine("Level finished!");
+       // Console.WriteLine("Level finished!");
 
         // Increment the current level index
         currentLevelIndex++;
@@ -249,8 +249,8 @@ public void CanMoveBox(GameObject wall, GameObject player, GameObject box, Direc
 
         PlaceGameObjects();
         GameObject box = GetBox();
-        GameObject goal = GetGoal();
-        GameObject player = GetPlayer();
+        GameObject goal = GetGoalObject();
+        GameObject player = GetPlayerObject();
       
     	    //Console.WriteLine("Position Box: (" + box.PosX + ", " + box.PosY + ")");
               //  Console.WriteLine("Position Player: (" + player.PosX + ", " + player.PosY + ")");
@@ -337,12 +337,49 @@ public bool CanMove(GameObject player, GameObject box, int dx, int dy)
         return false;
     }
 
- GameState currentState = new GameState(GetBoxObjects(), GetPlayer());
+ GameState currentState = new GameState(GetBoxObjects(), GetPlayerObject());
             gameStates.Push(currentState);
     return true;
 }
  
   
+  
+
+    // public void Move(Direction direction)
+    // {
+    //     GameObject player = GetPlayer();
+    //     GameObject box = GetBox();
+    //     int dx = 0;
+    //     int dy = 0;
+
+    //     switch (direction)
+    //     {
+    //         case Direction.Up:
+    //             dy = -1;
+    //             break;
+    //         case Direction.Down:
+    //             dy = 1;
+    //             break;
+    //         case Direction.Left:
+    //             dx = -1;
+    //             break;
+    //         case Direction.Right:
+    //             dx = 1;
+    //             break;
+    //         default:
+    //             break;
+    //     }
+
+    //     if (CanMove(player, box, dx, dy))
+    //     {
+    //         player.Move(dx, dy);
+    //         box.Move(dx, dy);
+    //         AddMoveCount();
+    //     }
+    // }
+    
+        
+        
 
     // public void Move(Direction direction)
     // {
@@ -407,19 +444,6 @@ public bool CanMove(GameObject player, GameObject box, int dx, int dy)
 }
 
 
-            // {
-            //     steps.RemoveAt(steps.Count - 1);
-            //     for (int i = 0; i < GameLevel.Length; i++)
-            //     {
-            //         PlayingLevel[i] = GameLevel[i];
-            //     }
-            //     getPlayerPosition();
-            //     foreach (Direction s in steps)
-            //     {
-            //         this.Move(s);
-            //     }
-                
-            
         
 }
 

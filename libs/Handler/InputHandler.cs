@@ -23,11 +23,11 @@ public sealed class InputHandler{
     public void Handle(ConsoleKeyInfo keyInfo)
     {
         GameObject focusedObject = engine.GetFocusedObject();
-      GameObject player = engine.GetPlayer();
+      GameObject player = engine.GetPlayerObject();
         GameObject box = engine.GetBox();
         List<GameObject> boxes = engine.GetBoxObjects();
-        GameObject goal = engine.GetGoal();
-        GameObject wall = engine.GetWall();
+        GameObject goal = engine.GetGoalObject();
+        GameObject wall = engine.GetWallObject();
 
 
 
