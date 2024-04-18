@@ -26,12 +26,18 @@
       "Type": 2,
       "Color": 6,
       "PosX": 6,
+      "PosY": 4
+    },
+    {
+      "Type": 4,
+      "Color": 6,
+      "PosX": 5,
       "PosY": 3
     },
     {
-      "Type": 3,
-      "Color": 6,
-      "PosX": 5,
+      "Type": 1,
+      "Color": 3,
+      "PosX": 6,
       "PosY": 3
     },
     {
