@@ -116,7 +116,7 @@ public sealed class InputHandler
                         engine.CheckWallCollision(wall, player, box, Direction.Up);
                         break;
                     case ConsoleKey.DownArrow:
-                        
+                        focusedObject.Move(0, 1);
                         focusedObject.CheckBoxCollision(box, player, Direction.Down);
                         engine.CheckWallCollision(wall, player, box, Direction.Down);
                         break;
