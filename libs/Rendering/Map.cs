@@ -99,10 +99,11 @@ public class Map
         {
             for (int j = 0; j < this.MapWidth; j++)
             {
-                this.SetGameObjectAt(i, j, stateGameObjects[i, j]?.Clone()); // Use Clone if defined
+                this.SetGameObjectAt(i, j, stateGameObjects[i, j]?.Clone()); // Ensure GameObject supports cloning if needed
             }
         }
     }
+
 
 
 }

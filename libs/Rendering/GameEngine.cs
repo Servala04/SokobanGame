@@ -200,7 +200,7 @@ public sealed class GameEngine
     public void Render()
     {
         //Clean the map
-        Console.Clear();
+        // Console.Clear();
 
         map.Initialize();
 
@@ -283,19 +283,35 @@ public sealed class GameEngine
 
     public void Rewind()
     {
-        if (stateHistory.Count > 1) // Ensure there is a previous state to revert to
-        {
-            Console.WriteLine("Current top state before rewind: " + stateHistory.Peek());
-            stateHistory.Pop(); // Remove current state
-            var previousState = stateHistory.Peek();
-            Console.WriteLine("Restoring to state: " + previousState);
-            map.RestoreState(previousState);
-            Render();
-        }
-        else
-        {
-            Console.WriteLine("Not enough states in history to rewind.");
-        }
+        if (stateHistory.Count > 2)
+    {
+        Console.WriteLine("Current top state before rewind : " + stateHistory.Peek());
+        stateHistory.Pop(); 
+        
+        var previousState = stateHistory.Peek(); 
+        Console.WriteLine("Restoring to state: " + previousState);
+        
+        stateHistory.Pop(); 
+        var earlierState = stateHistory.Peek(); 
+        Console.WriteLine("Going back to an even earlier state: " + earlierState);
+        
+        map.RestoreState(earlierState);
+        Render();
+    }
+    else if (stateHistory.Count > 1)
+    {
+        Console.WriteLine("Only one state to rewind to, performing single rewind.");
+        Console.WriteLine("Current top state before rewind: " + stateHistory.Peek());
+        stateHistory.Pop();
+        var singleState = stateHistory.Peek();
+        Console.WriteLine("Restoring to state: " + singleState);
+        map.RestoreState(singleState);
+        Render();
+    }
+    else
+    {
+        Console.WriteLine("Not enough states in history to rewind.");
+    }
     }
 
 }
