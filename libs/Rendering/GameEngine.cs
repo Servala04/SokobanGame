@@ -33,11 +33,58 @@ public sealed class GameEngine
     private List<GameObject> gameObjects = new List<GameObject>();
 
 
+    public void SaveGame(string filePath)
+    {
+        var gameState = new
+        {
+            MapWidth = map.MapWidth,
+            MapHeight = map.MapHeight,
+            Player = new { X = GetPlayerObject().PosX, Y = GetPlayerObject().PosY },
+            Boxes = gameObjects.OfType<Box>().Select(b => new { X = b.PosX, Y = b.PosY }).ToList(),
+            Goals = gameObjects.OfType<Goal>().Select(g => new { X = g.PosX, Y = g.PosY }).ToList(), // Ensure Goals are saved
+            Obstacles = gameObjects.OfType<Obstacle>().Select(o => new { X = o.PosX, Y = o.PosY }).ToList()
+        };
+
+        string json = JsonConvert.SerializeObject(gameState, Formatting.Indented);
+        File.WriteAllText(filePath, json);
+    }
+
+    public void LoadGame(string filePath)
+    {
+        string json = File.ReadAllText(filePath);
+        dynamic gameState = JsonConvert.DeserializeObject<dynamic>(json);
+
+        map.MapWidth = gameState.MapWidth;
+        map.MapHeight = gameState.MapHeight;
+        // map.Initialize()
+
+        gameObjects.Clear(); // Clear existing game objects
+        AddGameObject(new Player { PosX = gameState.Player.X, PosY = gameState.Player.Y });
+
+        foreach (var box in gameState.Boxes)
+        {
+            AddGameObject(new Box { PosX = box.X, PosY = box.Y });
+        }
+
+        foreach (var goal in gameState.Goals) // Ensure Goals are reconstructed
+        {
+            AddGameObject(new Goal { PosX = goal.X, PosY = goal.Y });
+        }
+
+        foreach (var obstacle in gameState.Obstacles)
+        {
+            AddGameObject(new Obstacle { PosX = obstacle.X, PosY = obstacle.Y });
+        }
+
+        // Optionally reset the focused object and other necessary states
+        _focusedObject = gameObjects.OfType<Player>().First();
+    }
+
     public Map GetMap() {
         return map;
     }
 
-    public GameObject GetFocusedObject(){
+    public GameObject? GetFocusedObject(){
         return _focusedObject;
     }
 
@@ -170,17 +217,30 @@ public sealed class GameEngine
 
     public bool finishLevel(GameObject box, GameObject goal)
     {
+        // Check if either the box or goal is null before attempting to access their properties
+        if (box == null)
+        {
+            Console.WriteLine("Error: The box object is null.");
+            return false; // Return false to indicate that the level cannot be finished due to error
+        }
+        if (goal == null)
+        {
+            Console.WriteLine("Error: The goal object is null.");
+            return false; // Return false to indicate that the level cannot be finished due to error
+        }
+
         // Check if the box is on the goal
         if (box.PosX == goal.PosX && box.PosY == goal.PosY)
         {
             Console.WriteLine("Level finished!");
-            return true;
+            return true; // Return true to indicate that the level has been successfully finished
         }
         else
         {
-            return false;
+            return false; // Return false to indicate that the level is not yet finished
         }
     }
+
 
     public void Render() {
         

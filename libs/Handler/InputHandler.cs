@@ -58,6 +58,14 @@ public sealed class InputHandler{
                     focusedObject.CheckBoxCollision(boxes, player, Direction.Right, dx, dy);
                     engine.CanMoveBox(wall, player, box, Direction.Right);
                     break;
+                case ConsoleKey.S:
+                    GameEngine.Instance.SaveGame("../gameSave.json");
+                    Console.WriteLine("Game saved!");
+                    break;
+                case ConsoleKey.L:
+                    GameEngine.Instance.LoadGame("../gameSave.json");
+                    Console.WriteLine("Game loaded!");
+                    break;
                 default:
                     break;
             }

@@ -11,14 +11,22 @@ class Program
         
         engine.Setup();
 
+        Console.WriteLine("Press 'S' to save game, 'L' to load game.");
+
         // Main game loop
         while (true)
         {
             engine.Render();
 
             // Handle keyboard input
-            ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-            inputHandler.Handle(keyInfo);
+            if (Console.KeyAvailable)  // Prevents blocking, reads only if a key is pressed
+            {
+                ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+                inputHandler.Handle(keyInfo);
+            }
+
+            // Game logic updates or delay to reduce CPU usage
+            System.Threading.Thread.Sleep(100);
         }
     }
 }
