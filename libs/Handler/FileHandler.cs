@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 public static class FileHandler
 {
-    private static string filePath;
+    private static string? filePath;
     private readonly static string envVar = "GAME_SETUP_PATH";
 
     static FileHandler()

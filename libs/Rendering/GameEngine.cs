@@ -44,12 +44,61 @@ private int moveCount;
 
     private List<GameObject> gameObjects = new List<GameObject>();
 
+    public void SaveGame(string filePath)
+    {
+        var boxes = gameObjects.OfType<Box>().Select((b, index) => new { Box = b, Index = index }).ToList();
+        var goals = gameObjects.OfType<Goal>().Select((g, index) => new { Goal = g, Index = index }).ToList();
+
+        var gameState = new
+    {
+        MapWidth = map.MapWidth,
+        MapHeight = map.MapHeight,
+        Player = new { X = GetPlayerObject().PosX, Y = GetPlayerObject().PosY },
+        Boxes = boxes.Select(b => new { Color = b.Index == 0 ? 7 : 6, X = b.Box.PosX, Y = b.Box.PosY}).ToList(),
+        Goals = goals.Select(g => new { Color = g.Index == 0 ? 7 : 6, X = g.Goal.PosX, Y = g.Goal.PosY}).ToList(),
+        Obstacles = gameObjects.OfType<Obstacle>().Select(o => new { X = o.PosX, Y = o.PosY }).ToList()
+    };
+
+        string json = JsonConvert.SerializeObject(gameState, Formatting.Indented);
+        File.WriteAllText(filePath, json);
+    }
+
+    public void LoadGame(string filePath)
+    {
+        string json = File.ReadAllText(filePath);
+        dynamic gameState = JsonConvert.DeserializeObject<dynamic>(json);
+
+        map.MapWidth = gameState.MapWidth;
+        map.MapHeight = gameState.MapHeight;
+        // map.Initialize()
+
+        gameObjects.Clear(); // Clear existing game objects
+        AddGameObject(new Player { PosX = gameState.Player.X, PosY = gameState.Player.Y });
+
+        foreach (var box in gameState.Boxes)
+        {
+            AddGameObject(new Box { PosX = box.X, PosY = box.Y, Color = box.Color});
+        }
+
+        foreach (var goal in gameState.Goals) // Ensure Goals are reconstructed
+        {
+            AddGameObject(new Goal { PosX = goal.X, PosY = goal.Y, Color = goal.Color});
+        }
+
+        foreach (var obstacle in gameState.Obstacles)
+        {
+            AddGameObject(new Obstacle { PosX = obstacle.X, PosY = obstacle.Y });
+        }
+
+        // Optionally reset the focused object and other necessary states
+        _focusedObject = gameObjects.OfType<Player>().First();
+    }
 
     public Map GetMap() {
         return map;
     }
 
-    public GameObject GetFocusedObject(){
+    public GameObject? GetFocusedObject(){
         return _focusedObject;
     }
 
@@ -123,8 +172,8 @@ public GameObject GetWallObject(){
 
 public void CanMoveBox(GameObject wall, GameObject player, GameObject box, Direction playerdirection)
 {
-GameObject playerObj = GetPlayerObject();
-   GameObject boxObj = GetBox();
+    GameObject playerObj = GetPlayerObject();
+    GameObject boxObj = GetBox();
 
    foreach (GameObject obj in gameObjects){
          if(obj is Obstacle){
@@ -225,13 +274,25 @@ GameObject playerObj = GetPlayerObject();
 
  public bool finishLevel(GameObject box1, GameObject box2, GameObject goal1, GameObject goal2)
 {
+
+    // Check if either the box or goal is null before attempting to access their properties
+        if (box1 == null || box2 == null)
+        {
+            Console.WriteLine("Error: The box object is null.");
+            return false; // Return false to indicate that the level cannot be finished due to error
+        }
+        if (goal1 == null || goal2 == null)	
+        {
+            Console.WriteLine("Error: The goal object is null.");
+            return false; // Return false to indicate that the level cannot be finished due to error
+        }
+
     bool boxOnGoal1 = (box1.PosX == goal1.PosX && box1.PosY == goal1.PosY);
     bool boxOnGoal2 = (box2.PosX == goal2.PosX && box2.PosY == goal2.PosY);
 
     // Check if the box is on the goal
     if (boxOnGoal1 && boxOnGoal2)
     {
-       // Console.WriteLine("Level finished!");
 
         // Increment the current level index
         currentLevelIndex++;
@@ -365,77 +426,6 @@ public bool CanMove(GameObject player, GameObject box, int dx, int dy)
 }
  
   
-  
-
-    // public void Move(Direction direction)
-    // {
-    //     GameObject player = GetPlayer();
-    //     GameObject box = GetBox();
-    //     int dx = 0;
-    //     int dy = 0;
-
-    //     switch (direction)
-    //     {
-    //         case Direction.Up:
-    //             dy = -1;
-    //             break;
-    //         case Direction.Down:
-    //             dy = 1;
-    //             break;
-    //         case Direction.Left:
-    //             dx = -1;
-    //             break;
-    //         case Direction.Right:
-    //             dx = 1;
-    //             break;
-    //         default:
-    //             break;
-    //     }
-
-    //     if (CanMove(player, box, dx, dy))
-    //     {
-    //         player.Move(dx, dy);
-    //         box.Move(dx, dy);
-    //         AddMoveCount();
-    //     }
-    // }
-    
-        
-        
-
-    // public void Move(Direction direction)
-    // {
-    //     GameObject player = GetPlayer();
-    //     GameObject box = GetBox();
-    //     int dx = 0;
-    //     int dy = 0;
-
-    //     switch (direction)
-    //     {
-    //         case Direction.Up:
-    //             dy = -1;
-    //             break;
-    //         case Direction.Down:
-    //             dy = 1;
-    //             break;
-    //         case Direction.Left:
-    //             dx = -1;
-    //             break;
-    //         case Direction.Right:
-    //             dx = 1;
-    //             break;
-    //         default:
-    //             break;
-    //     }
-
-    //     if (CanMove(player, box, dx, dy))
-    //     {
-    //         player.Move(dx, dy);
-    //         box.Move(dx, dy);
-    //         AddMoveCount();
-    //     }
-    // }
-    
         
      public void UndoMove(Player player, List<GameObject> boxObjects) {
     if (moveCount > 0) {

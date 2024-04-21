@@ -33,13 +33,7 @@ public sealed class InputHandler{
         if (focusedObject != null) {
               int dx = 0;
         int dy = 0;
-        // if (keyInfo.Modifiers == ConsoleModifiers.Control && keyInfo.Key == ConsoleKey.Z)
-        // {
-            
-        //    engine.UndoMove();
-        //     engine.Render();
-        //     return;
-        // }
+       
         
             // Handle keyboard input to move the player
             switch (keyInfo.Key)
@@ -67,6 +61,14 @@ public sealed class InputHandler{
                 case ConsoleKey.D:
                   Console.WriteLine("Undo");
                   engine.UndoMove( (Player)player, boxes);
+                    break;
+                 case ConsoleKey.S:
+                    GameEngine.Instance.SaveGame("../gameSave.json");
+                    Console.WriteLine("Game saved!");
+                    break;
+                case ConsoleKey.L:
+                    GameEngine.Instance.LoadGame("../gameSave.json");
+                    Console.WriteLine("Game loaded!");
                     break;
                 default:
                     break;

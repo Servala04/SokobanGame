@@ -17,8 +17,14 @@ class Program
             engine.Render();
 
             // Handle keyboard input
-            ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-            inputHandler.Handle(keyInfo);
+            if(Console.KeyAvailable){
+                ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+                inputHandler.Handle(keyInfo);
+            }
+
+            //game logic updates or delays to reduce cpu usage
+            System.Threading.Thread.Sleep(100);
+            
         }
     }
 }
