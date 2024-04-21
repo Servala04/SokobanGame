@@ -23,10 +23,9 @@ public sealed class InputHandler{
     public void Handle(ConsoleKeyInfo keyInfo)
     {
         GameObject focusedObject = engine.GetFocusedObject();
-      GameObject player = engine.GetPlayerObject();
+        GameObject player = engine.GetPlayerObject();
         GameObject box = engine.GetBox();
         List<GameObject> boxes = engine.GetBoxObjects();
-        GameObject goal = engine.GetGoalObject();
         GameObject wall = engine.GetWallObject();
 
 
@@ -34,13 +33,7 @@ public sealed class InputHandler{
         if (focusedObject != null) {
               int dx = 0;
         int dy = 0;
-        // if (keyInfo.Modifiers == ConsoleModifiers.Control && keyInfo.Key == ConsoleKey.Z)
-        // {
-            
-        //    engine.UndoMove();
-        //     engine.Render();
-        //     return;
-        // }
+       
         
             // Handle keyboard input to move the player
             switch (keyInfo.Key)
@@ -69,6 +62,14 @@ public sealed class InputHandler{
                   Console.WriteLine("Undo");
                   engine.UndoMove( (Player)player, boxes);
                     break;
+                 case ConsoleKey.S:
+                    GameEngine.Instance.SaveGame("../gameSave.json");
+                    Console.WriteLine("Game saved!");
+                    break;
+                case ConsoleKey.L:
+                    GameEngine.Instance.LoadGame("../gameSave.json");
+                    Console.WriteLine("Game loaded!");
+                    break;
                 default:
                     break;
             }
@@ -81,7 +82,7 @@ public sealed class InputHandler{
             }
             else
             {
-Console.WriteLine("You can't move there!");         }
+            Console.WriteLine("You can't move there!");         }
         }
         
     }

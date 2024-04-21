@@ -1,7 +1,7 @@
 namespace libs;
 
 public class Player : GameObject {
-    private static Player _instance;
+    private static Player? _instance;
 
     public Player () : base(){
         Type = GameObjectType.Player;
